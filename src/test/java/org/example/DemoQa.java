@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import java.util.regex.Pattern;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 public class DemoQa extends BaseTest{
@@ -112,6 +113,28 @@ public class DemoQa extends BaseTest{
         Assert.assertTrue(successMessage.isVisible(),
                 "Success message is not displayed!");
     }
+    @Test
+    public void mobileLenghValidation(){
+        Locator  forms = page.locator("a[href='/forms']");
+        Locator automationPracticeForm = page.locator("a[href='/automation-practice-form']");
+        Locator firstName = page.locator("#firstName");
+        Locator lastName = page.locator("#lastName");
+        Locator genderFemale = page.locator("#gender-radio-1");
+        Locator mobileNumber = page.locator("#userNumber");
+        Locator submitButton = page.locator("#submit");
 
+        forms.click();
+        automationPracticeForm.click();
+        firstName.fill(Constants.FIRST_NAME);
+        lastName.fill(Constants.LAST_NAME);
+        genderFemale.click();
+        mobileNumber.fill(Constants.INVALID_MOBILE_NUMBER);
+        submitButton.click();
+
+        assertFalse(
+                Constants.INVALID_MOBILE_NUMBER.matches("\\d{10}"),
+                "Phone number must contain exactly 10 digits"
+        );
+    }
 
 }
